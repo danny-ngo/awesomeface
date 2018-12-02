@@ -5,20 +5,21 @@ from PIL import Image
 from io import BytesIO
 import requests
 
+LIST_NUMBER = 10
+
 KEY = "efb1c590aab74d90875f4c3814436885"  # Replace with a valid subscription key (keeping the quotes in place).
 CF.Key.set(KEY)
+
 BASE_URL = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0'  # Replace with your regional Base URL
 CF.BaseUrl.set(BASE_URL)
 
-LIST_NUMBER = 10
-URL = "https://ep01.epimg.net/economia/imagenes/2017/12/06/actualidad/1512583870_308417_1512585863_noticia_normal.jpg"
-
 # You can use this example JPG or replace the URL below with your own URL to a JPEG image.
-img_url = URL
+img_url = "https://i2.wp.com/inc42.com/wp-content/uploads/2016/06/larrypage.jpg?fit=690%2C495&ssl=1"
 star = CF.face.detect(img_url)
 
 '''
 CF.face_list.create(LIST_NUMBER)
+
 with open("BigList.txt") as f:
     content = f.readlines()
     for line in content:
@@ -27,10 +28,13 @@ with open("BigList.txt") as f:
             CF.face_list.add_face(line, LIST_NUMBER, line + "", None)
         except:
             x = 1
+
 '''
 
 similarity = CF.face.find_similars(star[0]['faceId'], LIST_NUMBER, None, None, 1, 'matchFace')
+print(similarity)
 masterList = CF.face_list.get(LIST_NUMBER)
+print(masterList)
 
 masterList = masterList["persistedFaces"]
 foundURL = ""
@@ -40,6 +44,7 @@ for entry in masterList:
 
 image = Image.open(BytesIO(requests.get(foundURL).content))
 plt.imshow(image)
+print()
 plt.axis("off")
 _ = plt.title(similarity[0]['confidence'], size="x-large", y=-0.1)
 plt.show()
