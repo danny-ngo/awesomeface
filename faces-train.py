@@ -27,7 +27,7 @@ for root1, dirs1, files1 in os.walk(image_dir):
             for file in files:
                 
                 # print(file)
-                if index < 6:
+                if index < 500:
                     if file.endswith("png") or file.endswith("jpg"):
                         index += 1
                         path = os.path.join(root, file)
